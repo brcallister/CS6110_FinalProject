@@ -4,13 +4,13 @@
 
 import os
 
-from src.Environment import Environment
-
 def read_in_data(filename):
+    lines = []
     if not os.path.isfile(filename):
         print(f"Error: Input file '{filename}' does not exist.")
         print("Please make sure the file exists and try again.")
         exit(1)
 
-    print('TODO build the environment from file, then return the env object')
-    return None
+    with open(filename, 'r') as file:
+        lines = [line.strip() for line in file.readlines() if line.strip()]
+    return lines
