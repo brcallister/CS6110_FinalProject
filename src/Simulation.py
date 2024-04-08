@@ -2,7 +2,6 @@
 # CS 6110 - Final Project
 # =======================
 
-from src.Environment import Environment
 from src.OutputData import draw_image, print_env_to_console, print_stats_to_console
 
 class Simulation:
@@ -29,7 +28,7 @@ class Simulation:
     def runSimulation(self, env):
         if self.outputInitial:
             print_env_to_console(env)
-            draw_image(env, "TODO_Initial.png")
+            draw_image(env, "0_InitialMap.png")
 
         # Run the full simulation
         for step in range(self.numSteps):
@@ -38,6 +37,5 @@ class Simulation:
                 print_env_to_console(env)
                 print_stats_to_console(env)
             if self.graphicFrequency != 0 and step % self.graphicFrequency == self.graphicFrequency - 1:
-                draw_image(env, "TODO_stepNum.png")
-
+                draw_image(env, f"{step}_Map.png")
         return env

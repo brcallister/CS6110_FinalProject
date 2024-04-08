@@ -2,19 +2,44 @@
 
 TODO
 
-## Setup
+### Table of Contents
+- [Setup](README.md#setup)
+- [Usage](README.md#usage)
+- [Input](README.md#input)
+- [Output](README.md#output)
+- [Research](README.md#research)
 
+## Setup
+#### Dependencies
 1. Ensure that Python is installed on your machine. You can download the latest version of Python from the official website: [Python Downloads](https://www.python.org/downloads/).
 
-TODO
+2. Ensure all third-party dependencies are installed:
+    - `pip install matplotlib`
+
+#### Simulation Setup
+1. Add desired layout files to the `input` directory
+2. Update simulation settings in `Main.py`
 
 ## Usage
 
-TODO
+For best results, run this program from its top-level directory:
+`python ./Main.py`
+
+## Input
+
+Input files are expected in the `input` directory, and in the following format:
+  - The first line of the file should contain two numbers, separated by a single space. These numbers correspond to the number of rows and columns in the map, respectively. (i.e. `5 8` for a file that has 5 rows and 8 columns)
+  - After that, each line will hold the map data:
+      - `X` represents a Wall
+      - `O` represents an Exit
+      - Empty spaces represent locations where agents can freely traverse
+  - Extra whitespace or newlines are ignored
+  - See [this input file](input/Debug1.txt) for an example
 
 ## Output
 
-TODO
+All persistent output data is placed in the `output` directory.
+- This information will be overwritten on each subsequent run, so copy any desired files out of this directory before re-running the simulation.
 
 ## Research
 
