@@ -1,0 +1,35 @@
+66 34
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXOOXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+X               X                                X               X
+X               X                                X               X
+X               X                                X               X
+X               X                                X               X
+X                                                                X
+X               X                                X               X
+X               X                                X               X
+X               X                                X               X
+X               X                                X               X
+XXXXXXXXXXXXXXXXX                                XXXXXXXXXXXXXXXXX
+X               X                                X               X
+X               X                                X               X
+X               X                                X               X
+X               X                                X               X
+X               X                                X               X
+X                                                                X
+X               X                                X               X
+X               X                                X               X
+X               X                                X               X
+X               X                                X               X
+X               X                                X               X
+XXXXXXXXXXXXXXXXX                                XXXXXXXXXXXXXXXXX
+X               X                                X               X
+X               X                                X               X
+X               X                                X               X
+X               X                                X               X
+X               X                                X               X
+X                                                                X
+X               X                                X               X
+X               X                                X               X
+X               X                                X               X
+X               X                                X               X
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXOOXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
