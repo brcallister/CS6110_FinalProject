@@ -12,7 +12,7 @@ if not os.path.exists('output'):
 def draw_image(environment, filename):
     ax = plt.gca()
 
-    # Loop through (potentially jagged) array
+    # Loop through array
     for row_index, row in enumerate(environment.map[::-1]):
         for col_index, location in enumerate(row):
             for thing in location.thingsHere:
@@ -44,7 +44,7 @@ def draw_image(environment, filename):
 
 def print_env_to_console(environment):
     print('Current Enviroment:')
-    # Loop through (potentially jagged) array
+    # Loop through array
     for row in environment.map:
         rowBuffer = ''
         for location in row:
