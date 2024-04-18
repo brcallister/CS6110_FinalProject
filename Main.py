@@ -13,7 +13,7 @@ if __name__ == "__main__":
     numRows, numCols, rawLayout = read_in_data("Debug1.txt")
 
     # Create full environment according to specs
-    env = Environment(numRows, numCols, rawLayout, numAgents=10)
+    env = Environment(numRows, numCols, rawLayout)
 
     # Specify the type of simulation to run
     simulation = Simulation(numSteps=10, printFreq=10, graphicFreq=5, outputInitial=True)

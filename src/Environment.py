@@ -7,7 +7,7 @@ import random
 from src.Entities import Entity
 
 class Environment:    
-    def __init__(self, numRows, numCols, rawLayout, numAgents):
+    def __init__(self, numRows, numCols, rawLayout):
         self.numRows = numRows
         self.numCols = numCols
         fullMap = []
@@ -30,11 +30,6 @@ class Environment:
                 # TODO - add additional items here
                 row.append(newLocation)
             fullMap.append(row)
-
-        # Add agents to the world
-        for i in range(numAgents):
-            # TODO place agents throughout valid empty spaces
-            pass
 
         self.map = fullMap
     
