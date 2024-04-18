@@ -24,6 +24,6 @@ def read_in_data(filename):
         exit(1)
 
     with open(filepath, 'r') as file:
-        lines = [line.strip() for line in file.readlines() if line.strip()]
+        lines = [line.strip('\n') for line in file.readlines()]
     dim = lines[0].split(' ')
     return int(dim[0]), int(dim[1]), lines[1:]

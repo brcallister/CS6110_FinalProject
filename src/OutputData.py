@@ -24,8 +24,11 @@ def draw_image(environment, filename):
                 elif thing.type == 'EXIT':
                     color = 'blue'
                     marker = 'o'
-                elif thing.type == 'TODO_Agent':
+                elif thing.type == 'AgentBetray':
                     color = 'red'
+                    marker = 'x'
+                elif thing.type == 'AgentCooperate':
+                    color = 'green'
                     marker = 'x'
                 # Plot a point at current location with determined color
                 ax.plot(col_index, row_index, marker=marker, color=color)
@@ -49,6 +52,10 @@ def print_env_to_console(environment):
                 rowBuffer += 'X'
             elif location.isEntityHere('EXIT'):
                 rowBuffer += 'O'
+            elif location.isEntityHere('AgentBetray'):
+                rowBuffer += 'b'
+            elif location.isEntityHere('AgentCooperate'):
+                rowBuffer += 'c'
             else:
                 rowBuffer += ' '
         print(rowBuffer)

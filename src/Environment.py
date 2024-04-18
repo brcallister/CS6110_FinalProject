@@ -12,9 +12,6 @@ class Environment:
         self.numCols = numCols
         fullMap = []
 
-        # TODO - beware, currently this creates a jagged array.
-        # TODO - we should either anticipate that or update that in this implementation
-        
         # Set up map layout
         for line in rawLayout:
             row = []
@@ -27,9 +24,19 @@ class Environment:
                 # Exit
                 elif char == 'O':
                     newLocation = self.Location([Entity('EXIT')])
+                # Agent B
+                elif char == 'b':
+                    newLocation = self.Location([Entity('AgentBetray')])
+                # Agent C
+                elif char == 'c':
+                    newLocation = self.Location([Entity('AgentCooperate')])
                 # TODO - add additional items here
                 row.append(newLocation)
+            while len(row) < numRows:
+                row.append(self.Location([]))
             fullMap.append(row)
+        while len(fullMap) < numCols:
+            fullMap.append([self.Location([]) for _ in range(numRows)])
 
         self.map = fullMap
     
