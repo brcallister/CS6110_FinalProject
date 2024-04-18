@@ -4,10 +4,10 @@ X             X
 X      b      X
 X             X
 X             X
-X      a   b  X
-X    b    baa X
-X   a   b     X
+X      c   b  X
+X    b    bcc X
+X   c   b     X
 X             X
-X  a  a   b   X
+X  c  c   b   X
 X             X
 XXXXXXXXXXXXXXX
