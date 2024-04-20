@@ -12,10 +12,12 @@ class Environment:
 	def __init__(self, numRows, numCols, rawLayout):
 		self.numRows = numRows
 		self.numCols = numCols
+		self.agents = []
 		fullMap = []
 		exits = []
 
 		# Set up map layout
+		agentId = 0
 		for i in range(len(rawLayout)):
 			row = []
 			for j in range(len(rawLayout[i])):
@@ -30,10 +32,16 @@ class Environment:
 					exits.append([i, j])
 				# Agent B
 				elif rawLayout[i][j] == 'b':
-					newLocation = self.Location([Entity('AgentBetray')])
+					newAgent = Agent('AgentBetray', agentId)
+					newLocation = self.Location([newAgent])
+					self.agents.append(newAgent)
+					agentId += 1
 				# Agent C
 				elif rawLayout[i][j] == 'c':
-					newLocation = self.Location([Entity('AgentCooperate')])
+					newAgent = Agent('AgentCooperate', agentId)
+					newLocation = self.Location([newAgent])
+					self.agents.append(newAgent)
+					agentId += 1
 				# TODO - add additional items here
 				row.append(newLocation)
 			while len(row) < numRows:
@@ -63,9 +71,9 @@ class Environment:
 		
 		return potentialMoves
 	
-	def runOneTimeStep(self, agents):
+	def runOneTimeStep(self):
 		potentialMap = copy.deepcopy(self.map)
-		for agent in agents:
+		for agent in self.agents:
 			# Find current empty spaces
 			agentPosition = agent.currentLocation
 			potentialMoves = self.findPotentialMoves(agentPosition)
