@@ -90,7 +90,9 @@ class Environment:
 			# There is only one agent, so no conflict
 			if len(agentList) == 1:
 				agent = agentList[0]
+				self.map[agent.currentLocation[0]][agent.currentLocation[1]].thingsHere.remove(agent)
 				agent.currentLocation = location
+				self.map[agent.currentLocation[0]][agent.currentLocation[1]].thingsHere.append(agent)
 				agent.numberTimesNotMoved = 0
 			else:
 				# TODO: Figure out conflict

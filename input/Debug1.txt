@@ -1,7 +1,7 @@
 37 11
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 X                                   X
-X                                   X
+X                               c   X
 X                                   X
 X              XXXXXXXXXXXXXXXXXXXXXX
 X              X
