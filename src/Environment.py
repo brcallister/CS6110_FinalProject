@@ -3,10 +3,8 @@
 # =======================
 
 import random
-import copy
 
-from src.Entities import Entity
-from src.Entities import Agent
+from src.Entities import Entity, Agent
 
 class Environment:    
 	def __init__(self, numRows, numCols, rawLayout):
@@ -45,34 +43,29 @@ class Environment:
 					agentId += 1
 				# TODO - add additional items here
 				row.append(newLocation)
-			while len(row) < numRows:
+			while len(row) < self.numCols:
 				row.append(self.Location([]))
 			fullMap.append(row)
-		while len(fullMap) < numCols:
+		while len(fullMap) < self.numRows:
 			fullMap.append([self.Location([]) for _ in range(numRows)])
 
 		self.map = fullMap
 		self.exits = exits
 	
 	def findPotentialMoves(self, position):
-		maxRows = len(self.map)
-		maxCols = len(self.map[0])
-		agentX = position[0]
-		agentY = position[1]
+		agentX, agentY = position[1], position[0]
 		potentialMoves = []
 		# Find all suitable spaces an Agent can move to
-		for i in range(max(agentX-1, 0), min(agentX+2, maxRows)):
-			for j in range(max(agentY-1, 0), min(agentY+2, maxCols)):
+		for i in range(max(agentX-1, 0), min(agentX+2, self.numCols)):
+			for j in range(max(agentY-1, 0), min(agentY+2, self.numRows)):
 				if i == agentX and j == agentY:
 					continue
 				# If there is not another agent or a wall, that location is available to move to.
-				if not self.map[i][j].isEntityHere([[Entity('AgentBetray')], [Entity('AgentCooperate')], [Entity('WALL')]]):
-					potentialMoves.append((i, j))
-		
+				if not self.map[j][i].isEntityHere([Entity('AgentBetray'), Entity('AgentCooperate'), Entity('WALL')]):
+					potentialMoves.append((j, i))
 		return potentialMoves
 	
 	def runOneTimeStep(self):
-		potentialMap = copy.deepcopy(self.map)
 		moves = {}
 		for agent in self.agents:
 			# Find current empty spaces
@@ -98,21 +91,18 @@ class Environment:
 				# TODO: Figure out conflict
 				pass
 			if agent.currentLocation in self.exits:
+				self.map[agent.currentLocation[0]][agent.currentLocation[1]].thingsHere.remove(agent)
 				self.escapedAgents.append(agent)
-				self.agents.remove(agent) # TODO make sure this works as expected
-		
-		# Loop through the actual map and update agent locations
-		
-
+				self.agents.remove(agent)
 
 	class Location:
 		def __init__(self, entitiesHere):
 			self.thingsHere = entitiesHere
 
 		def isEntityHere(self, thingsToFind):
-			for ent in thingsToFind:
-				for thing in self.thingsHere:
-					if thing.type == ent:
+			for thing in self.thingsHere:
+				for entity in thingsToFind:
+					if thing.type == entity.type:
 						return True
 			return False
 

@@ -2,7 +2,6 @@
 # CS 6110 - Final Project
 # =======================
 
-import os
 from src.ReadInData import read_in_data
 from src.Environment import Environment
 from src.Simulation import Simulation
@@ -10,7 +9,7 @@ from src.OutputData import draw_image
 
 if __name__ == "__main__":
     # Read layout information in from file and prep output dir
-    numRows, numCols, rawLayout = read_in_data("Debug1.txt")
+    numCols, numRows, rawLayout = read_in_data("Debug1.txt")
 
     # Create full environment according to specs
     env = Environment(numRows, numCols, rawLayout)

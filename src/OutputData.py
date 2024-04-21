@@ -5,6 +5,8 @@
 import os
 import matplotlib.pyplot as plt
 
+from src.Entities import Entity, Agent
+
 OUTPUT_DIR = 'output'
 if not os.path.exists('output'):
     os.makedirs('output')
@@ -38,7 +40,7 @@ def draw_image(environment, filename):
     plt.gca().set_yticklabels(ax.get_yticklabels()[::-1])
 
     # Show plot
-    plt.show()
+    # plt.show()
 
     plt.savefig(os.path.join(OUTPUT_DIR, filename))
 
@@ -48,13 +50,13 @@ def print_env_to_console(environment):
     for row in environment.map:
         rowBuffer = ''
         for location in row:
-            if location.isEntityHere(['WALL']):
+            if location.isEntityHere([Entity('WALL')]):
                 rowBuffer += 'X'
-            elif location.isEntityHere(['EXIT']):
+            elif location.isEntityHere([Entity('EXIT')]):
                 rowBuffer += 'O'
-            elif location.isEntityHere(['AgentBetray']):
+            elif location.isEntityHere([Entity('AgentBetray')]):
                 rowBuffer += 'b'
-            elif location.isEntityHere(['AgentCooperate']):
+            elif location.isEntityHere([Entity('AgentCooperate')]):
                 rowBuffer += 'c'
             else:
                 rowBuffer += ' '
