@@ -32,13 +32,13 @@ class Environment:
 					exits.append([i, j])
 				# Agent B
 				elif rawLayout[i][j] == 'b':
-					newAgent = Agent('AgentBetray', agentId)
+					newAgent = Agent('AgentBetray', agentId, [i,j])
 					newLocation = self.Location([newAgent])
 					self.agents.append(newAgent)
 					agentId += 1
 				# Agent C
 				elif rawLayout[i][j] == 'c':
-					newAgent = Agent('AgentCooperate', agentId)
+					newAgent = Agent('AgentCooperate', agentId, [i,j])
 					newLocation = self.Location([newAgent])
 					self.agents.append(newAgent)
 					agentId += 1
@@ -64,31 +64,46 @@ class Environment:
 			for j in range(max(agentY-1, 0), min(agentY+2, maxCols)):
 				if i == agentX and j == agentY:
 					continue
-				potentialLocation = self.Location(self.map[i][j])
 				# If there is not another agent or a wall, that location is available to move to.
-				if not potentialLocation.isEntityHere([[Entity('AgentBetray')], [Entity('AgentCooperate')], [Entity('WALL')]]):
+				if not self.map[i][j].isEntityHere([[Entity('AgentBetray')], [Entity('AgentCooperate')], [Entity('WALL')]]):
 					potentialMoves.append(self.map[i][j])
 		
 		return potentialMoves
 	
 	def runOneTimeStep(self):
 		potentialMap = copy.deepcopy(self.map)
+		moves = {}
 		for agent in self.agents:
 			# Find current empty spaces
 			agentPosition = agent.currentLocation
 			potentialMoves = self.findPotentialMoves(agentPosition)
-			agentPickedMove = agent.pickDesiredLocation(potentialMap, self.exits)
-		# TODO give all agents a chance to move
-		pass
+			agentPickedMove = agent.pickDesiredLocation(potentialMoves, self.exits)
+			agent.desiredLocation = agentPickedMove
+			if(moves[agentPickedMove]):
+				moves[agentPickedMove].append(agent)
+			else:
+				moves[agentPickedMove] = [agent]
+		
+		# Loop through our moves, resolve each conflict per move and pick agent to actually move
+		for location,agentList in moves.items():
+			# There is only one agent, so no conflict
+			if len(agentList) == 1:
+				agent = agentList[0]
+				agent.currentLocation = location
+				agent.numberTimesNotMoved = 0
+			else:
+				# TODO: Figure out conflict
+				pass
 
 	class Location:
 		def __init__(self, entitiesHere):
 			self.thingsHere = entitiesHere
 
-		def isEntityHere(self, thingToFind):
-			for thing in self.thingsHere:
-				if thing.type == thingToFind:
-					return True
+		def isEntityHere(self, thingsToFind):
+			for ent in thingsToFind:
+				for thing in self.thingsHere:
+					if thing.type == ent:
+						return True
 			return False
 
 

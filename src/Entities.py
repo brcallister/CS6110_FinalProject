@@ -9,10 +9,10 @@ class Entity:
 		self.type = entityType
 
 class Agent(Entity):
-	def __init__(self, entityType, id):
+	def __init__(self, entityType, id, startLocation):
 		super().__init__(entityType)
 		self.id = id
-		self.currentLocation = []      # [x,y]
+		self.currentLocation = startLocation      # [x,y]
 		self.desiredLocation = []      # [x,y] of the location they want to move to
 		self.familiarityWithExit = 10  # TODO: figure out how this actually works
 		self.numberTimesNotMoved = 0
@@ -23,7 +23,7 @@ class Agent(Entity):
 
 	def pickDesiredLocation(self, potentialMoves, exits):
 		if len(potentialMoves) == 0:
-			return
+			return []
 		movementProbs = {}
 		# For every exit that exists, we need to find what exit the agent will move toward
 		for exit in exits:
