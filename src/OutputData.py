@@ -48,13 +48,13 @@ def print_env_to_console(environment):
     for row in environment.map:
         rowBuffer = ''
         for location in row:
-            if location.isEntityHere('WALL'):
+            if location.isEntityHere(['WALL']):
                 rowBuffer += 'X'
-            elif location.isEntityHere('EXIT'):
+            elif location.isEntityHere(['EXIT']):
                 rowBuffer += 'O'
-            elif location.isEntityHere('AgentBetray'):
+            elif location.isEntityHere(['AgentBetray']):
                 rowBuffer += 'b'
-            elif location.isEntityHere('AgentCooperate'):
+            elif location.isEntityHere(['AgentCooperate']):
                 rowBuffer += 'c'
             else:
                 rowBuffer += ' '
