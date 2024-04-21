@@ -3,6 +3,7 @@
 # =======================
 
 import math
+import random
 
 class Entity:
 	def __init__(self, entityType):
@@ -40,13 +41,30 @@ class Agent(Entity):
 				prob = math.exp(self.familiarityWithExit*moveSf) / sumSf
 				# using a tuple as a key will allow us to konw what move towards what exit is best for our agent
 				movementProbs[(move[0], move[1])] = prob
-		
-		# Now that we have all probabilites, we need to find the best one.
-		bestMove = max(movementProbs, key=movementProbs.get)
-		return bestMove
 
-	def changeRoles(self):
-		# if they haven't moved after a certain number of times, switch from
-		# cooperate to betray
-		# use the formulas in the paper
-		pass
+		# TODO: We may still want to just swap to this
+		# bestMove = max(movementProbs, key=movementProbs.get)
+		
+		# Pick a move based on the calculated probabilities
+		moves, probs = zip(*movementProbs.items())
+		# Apply an exponent function on the probabilities so better decisions are more heavily weighted
+		probs = [x ** 32 for x in probs]
+		# Rescale to add to 100 so the probabilities are easier to debug
+		probs = [x / sum(probs) * 100 for x in probs]
+		# Choose a move randomly based on the probabilities
+		chosenMove = random.choices(moves, weights=probs, k=1)[0]
+		return chosenMove
+	
+	def changeRolesIfDesired(self):
+		# TODO: use the formulas in the paper
+		if self.numberTimesNotMoved >= 10:
+			if self.type == 'AgentBetray':
+				self.type = 'AgentCooperate'
+			elif self.type == 'AgentCooperate':
+				self.type = 'AgentBetray'
+	
+	def decideCoopOrBetray(self):
+		# Right now, they will just decide based off of their agent type
+		if self.type == "AgentCooperate":
+			return "Cooperate"
+		return "Betray"

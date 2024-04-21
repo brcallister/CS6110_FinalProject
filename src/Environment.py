@@ -67,8 +67,8 @@ class Environment:
 	
 	def runOneTimeStep(self):
 		moves = {}
+		# Loop through agents, let each figure out where they want to move
 		for agent in self.agents:
-			# Find current empty spaces
 			agentPosition = agent.currentLocation
 			potentialMoves = self.findPotentialMoves(agentPosition)
 			agentPickedMove = agent.pickDesiredLocation(potentialMoves, self.exits)
@@ -80,20 +80,38 @@ class Environment:
 		
 		# Loop through our moves, resolve each conflict per move and pick agent to actually move
 		for location, agentList in moves.items():
-			# There is only one agent, so no conflict
+			winner = None
+			# No conflict - there is only one agent
 			if len(agentList) == 1:
-				agent = agentList[0]
-				self.map[agent.currentLocation[0]][agent.currentLocation[1]].thingsHere.remove(agent)
-				agent.currentLocation = location
-				self.map[agent.currentLocation[0]][agent.currentLocation[1]].thingsHere.append(agent)
-				agent.numberTimesNotMoved = 0
+				winner = agentList[0]
+			# Resolve conflict - Multiple agents attempting to enter same location
 			else:
-				# TODO: Figure out conflict
-				pass
-			if agent.currentLocation in self.exits:
-				self.map[agent.currentLocation[0]][agent.currentLocation[1]].thingsHere.remove(agent)
-				self.escapedAgents.append(agent)
-				self.agents.remove(agent)
+				# Dictionary of Agent -> Decision
+				agentDecisions = {}
+				for contender in agentList:
+					decision = contender.decideCoopOrBetray()
+					agentDecisions[contender] = decision
+				# TODO: Non-randomly figure out winner
+				winner = random.choice(list(agentDecisions.keys()))
+				
+			# Add the winner to new location (we MUST do this first, or the reference is killed)
+			self.map[location[0]][location[1]].thingsHere.append(winner)
+			# Remove the winner from their old location
+			self.map[winner.currentLocation[0]][winner.currentLocation[1]].thingsHere.remove(winner)
+			# Now update the winner's internal location
+			winner.currentLocation = location
+			# Reset number of times since winner last moved
+			winner.numberTimesNotMoved = 1
+
+			# Remove agents that have successfully reached the exit
+			if winner.currentLocation in self.exits:
+				self.map[winner.currentLocation[0]][winner.currentLocation[1]].thingsHere.remove(winner)
+				self.escapedAgents.append(winner)
+				self.agents.remove(winner)
+
+		# Give all agents a chance to swap their type
+		for agent in self.agents:
+			agent.changeRolesIfDesired()
 
 	class Location:
 		def __init__(self, entitiesHere):
@@ -105,5 +123,3 @@ class Environment:
 					if thing.type == entity.type:
 						return True
 			return False
-
-
