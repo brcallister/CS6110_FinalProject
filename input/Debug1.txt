@@ -6,7 +6,7 @@ X                                   X
 X              XXXXXXXXXXXXXXXXXXXXXX
 X              X
 X              X
-X              XXXXXXXX
+X       c      XXXXXXXX
 X                     X
 X                     O
 XXXXXXXXXXXXXXXXXXXXXXX

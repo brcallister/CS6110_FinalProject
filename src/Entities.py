@@ -24,22 +24,25 @@ class Agent(Entity):
 	def pickDesiredLocation(self, potentialMoves, exits):
 		if len(potentialMoves) == 0:
 			return []
+		
 		movementProbs = {}
 		# For every exit that exists, we need to find what exit the agent will move toward
 		for exit in exits:
 			# Find the sum of all SF values for this potential move (3 figure 2 in paper)
 			sumSf = 0
 			for move in potentialMoves:
+				if move == exit:
+					return (move[0], move[1])
 				sumSf += math.exp(self.familiarityWithExit * self.calculateSF(move, exit))
 			# Now calculate the probability of making that move (3 figure 2 in paper)
 			for move in potentialMoves:
 				moveSf = self.calculateSF(move, exit)
 				prob = math.exp(self.familiarityWithExit*moveSf) / sumSf
 				# using a tuple as a key will allow us to konw what move towards what exit is best for our agent
-				movementProbs[(move[0], move[1], exit[0], exit[1])] = prob
+				movementProbs[(move[0], move[1])] = prob
 		
 		# Now that we have all probabilites, we need to find the best one.
-		bestMove = max(movementProbs, key=movementProbs.keys)
+		bestMove = max(movementProbs, key=movementProbs.get)
 		return bestMove
 
 	def changeRoles(self):

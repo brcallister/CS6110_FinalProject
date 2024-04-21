@@ -32,6 +32,8 @@ class Simulation:
 
         # Run the full simulation
         for step in range(self.numSteps):
+            if env.agents:
+                return env
             env.runOneTimeStep()
             if self.printFrequency != 0 and step % self.printFrequency == self.printFrequency - 1:
                 print_env_to_console(env)

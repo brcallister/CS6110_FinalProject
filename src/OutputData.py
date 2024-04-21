@@ -38,7 +38,7 @@ def draw_image(environment, filename):
     plt.gca().set_yticklabels(ax.get_yticklabels()[::-1])
 
     # Show plot
-    # plt.show()
+    plt.show()
 
     plt.savefig(os.path.join(OUTPUT_DIR, filename))
 

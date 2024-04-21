@@ -13,6 +13,7 @@ class Environment:
 		self.numRows = numRows
 		self.numCols = numCols
 		self.agents = []
+		self.escapedAgents = []
 		fullMap = []
 		exits = []
 
@@ -29,16 +30,16 @@ class Environment:
 				# Exit
 				elif rawLayout[i][j] == 'O':
 					newLocation = self.Location([Entity('EXIT')])
-					exits.append([i, j])
+					exits.append((i, j))
 				# Agent B
 				elif rawLayout[i][j] == 'b':
-					newAgent = Agent('AgentBetray', agentId, [i,j])
+					newAgent = Agent('AgentBetray', agentId, (i,j))
 					newLocation = self.Location([newAgent])
 					self.agents.append(newAgent)
 					agentId += 1
 				# Agent C
 				elif rawLayout[i][j] == 'c':
-					newAgent = Agent('AgentCooperate', agentId, [i,j])
+					newAgent = Agent('AgentCooperate', agentId, (i,j))
 					newLocation = self.Location([newAgent])
 					self.agents.append(newAgent)
 					agentId += 1
@@ -66,7 +67,7 @@ class Environment:
 					continue
 				# If there is not another agent or a wall, that location is available to move to.
 				if not self.map[i][j].isEntityHere([[Entity('AgentBetray')], [Entity('AgentCooperate')], [Entity('WALL')]]):
-					potentialMoves.append(self.map[i][j])
+					potentialMoves.append((i, j))
 		
 		return potentialMoves
 	
@@ -79,13 +80,13 @@ class Environment:
 			potentialMoves = self.findPotentialMoves(agentPosition)
 			agentPickedMove = agent.pickDesiredLocation(potentialMoves, self.exits)
 			agent.desiredLocation = agentPickedMove
-			if(moves[agentPickedMove]):
+			if agentPickedMove in moves:
 				moves[agentPickedMove].append(agent)
 			else:
 				moves[agentPickedMove] = [agent]
 		
 		# Loop through our moves, resolve each conflict per move and pick agent to actually move
-		for location,agentList in moves.items():
+		for location, agentList in moves.items():
 			# There is only one agent, so no conflict
 			if len(agentList) == 1:
 				agent = agentList[0]
@@ -94,6 +95,13 @@ class Environment:
 			else:
 				# TODO: Figure out conflict
 				pass
+			if agent.currentLocation in self.exits:
+				self.escapedAgents.append(agent)
+				self.agents.remove(agent) # TODO make sure this works as expected
+		
+		# Loop through the actual map and update agent locations
+		
+
 
 	class Location:
 		def __init__(self, entitiesHere):
