@@ -76,10 +76,13 @@ def print_env_to_console(environment):
         print(rowBuffer)
     print()
 
-def print_stats_to_console(environment):
+def print_stats_to_console(env, initial = False):
     # TODO: maybe print additional stats to console?
-    # print('Current Stats: ')
-    # print('Agents safe: ')
-    # print('Agents still in building: ')
-    # print('Time taken: ')
+    if initial:
+        print('Initial Stats')
+    else:    
+        print('Current Stats: ')
+        print('\tAgents safe: ')
+        print('\tAgents still in building: ')
+        print('\tTime taken: ')
     pass

@@ -12,6 +12,7 @@ class Environment:
 		self.numCols = numCols
 		self.agents = []
 		self.escapedAgents = []
+		self.numTotalConflicts = 0
 		fullMap = []
 		exits = []
 
