@@ -53,8 +53,8 @@ def draw_image(environment, filename):
     plt.savefig(os.path.join(OUTPUT_DIR, filename))
     plt.close()
 
-def print_env_to_console(environment):
-    print('Current Enviroment:')
+def print_env_to_console(environment, timestep):
+    print(f'Current Environment (timestep: {timestep + 1}):')
     # Loop through array
     for row in environment.map:
         rowBuffer = ''
@@ -76,13 +76,45 @@ def print_env_to_console(environment):
         print(rowBuffer)
     print()
 
-def print_stats_to_console(env, initial = False):
-    # TODO: maybe print additional stats to console?
-    if initial:
-        print('Initial Stats')
-    else:    
-        print('Current Stats: ')
-        print('\tAgents safe: ')
-        print('\tAgents still in building: ')
-        print('\tTime taken: ')
-    pass
+def print_stats_to_console(env, timestep):
+    if timestep == 0:
+        print('Initial Setup:')
+        numExits = 0
+        numSigns = 0
+        numLights = 0
+        numCoopAgents = 0
+        numBetrayAgents = 0
+        for row in env.map:
+            for location in row:
+                for entity in location.thingsHere:
+                    if entity.type == "EXIT":
+                         numExits += 1
+                    elif entity.type == "EXIT_SIGN":
+                         numSigns += 1
+                    elif entity.type == "LIGHT":
+                         numLights += 1
+                    elif entity.type == "AgentCooperate":
+                         numCoopAgents += 1
+                    elif entity.type == "AgentBetray":
+                         numBetrayAgents += 1 
+        print(f'\tNumber of Exits: {numExits}')
+        print(f'\tNumber of Exit Signs: {numSigns}')
+        if numLights != 0:
+            print(f'\tNumber of Lights: {numLights}')
+        print(f'\tNumber of Agents (Cooperative): {numCoopAgents}')
+        print(f'\tNumber of Agents (Betrayers): {numBetrayAgents}')
+    else:
+        print(f'Current Stats (timestep {timestep + 1}):')
+        print(f'\tTotal Number of Conflicts: {env.numTotalConflicts}')
+        print(f'\tEscaped Agents: {len(env.escapedAgents)}')
+        print(f'\tTotal Agents:   {len(env.agents) + len(env.escapedAgents)}')
+        numCoopAgents = 0
+        numBetrayAgents = 0
+        for agent in env.escapedAgents:
+            if agent.type == "AgentCooperate":
+                numCoopAgents += 1
+            elif agent.type == "AgentBetray":
+                numBetrayAgents += 1
+        print(f'\tNumber of Escaped Agents (Cooperative): {numCoopAgents}')
+        print(f'\tNumber of Escaped Agents (Betrayers):   {numBetrayAgents}')
+    print()

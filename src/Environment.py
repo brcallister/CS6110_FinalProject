@@ -13,8 +13,8 @@ class Environment:
 		self.agents = []
 		self.escapedAgents = []
 		self.numTotalConflicts = 0
-		fullMap = []
-		exits = []
+		self.exits = []
+		self.map = []
 
 		# Set up map layout
 		agentId = 0
@@ -29,7 +29,7 @@ class Environment:
 				# Exit
 				elif rawLayout[i][j] == 'O':
 					newLocation = self.Location([Entity('EXIT')])
-					exits.append((i, j))
+					self.exits.append((i, j))
 				# Agent B
 				elif rawLayout[i][j] == 'b':
 					newAgent = Agent('AgentBetray', agentId, (i,j))
@@ -51,12 +51,9 @@ class Environment:
 				row.append(newLocation)
 			while len(row) < self.numCols:
 				row.append(self.Location([]))
-			fullMap.append(row)
-		while len(fullMap) < self.numRows:
-			fullMap.append([self.Location([]) for _ in range(numRows)])
-
-		self.map = fullMap
-		self.exits = exits
+			self.map.append(row)
+		while len(self.map) < self.numRows:
+			self.map.append([self.Location([]) for _ in range(numRows)])
 	
 	def findPotentialMoves(self, position):
 		agentX, agentY = position[1], position[0]

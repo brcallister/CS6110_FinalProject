@@ -27,8 +27,8 @@ class Simulation:
     '''
     def runSimulation(self, env):
         if self.outputInitial:
-            print_env_to_console(env)
-            print_stats_to_console(env)
+            print_env_to_console(env, 0)
+            print_stats_to_console(env, 0)
             draw_image(env, "0_InitialMap.png")
 
         # Run the full simulation
@@ -38,9 +38,9 @@ class Simulation:
                 return env
             env.runOneTimeStep()
             if self.printFrequency != 0 and step % self.printFrequency == self.printFrequency - 1:
-                print_env_to_console(env)
-                print_stats_to_console(env)
+                print_env_to_console(env, step)
+                print_stats_to_console(env, step)
             if self.graphicFrequency != 0 and step % self.graphicFrequency == self.graphicFrequency - 1:
                 draw_image(env, f"{step + 1}_Map.png")
-        print(f'After {self.numSteps} timesteps, {len(env.agents)}/{len(env.agents) + len(self.escapedAgents)} agents remain in the building.')
+        print(f'After {self.numSteps} timesteps, {len(env.agents)}/{len(env.agents) + len(env.escapedAgents)} agents remain in the building.')
         return env
