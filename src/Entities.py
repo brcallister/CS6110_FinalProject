@@ -24,7 +24,7 @@ class Agent(Entity):
 
 	def pickDesiredLocation(self, potentialMoves, exits):
 		if len(potentialMoves) == 0:
-			return []
+			return None
 		
 		movementProbs = {}
 		# For every exit that exists, we need to find what exit the agent will move toward

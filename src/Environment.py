@@ -122,10 +122,11 @@ class Environment:
 			potentialMoves = self.findPotentialMoves(agentPosition)
 			agentPickedMove = agent.pickDesiredLocation(potentialMoves, self.exits)
 			agent.desiredLocation = agentPickedMove
-			if agentPickedMove in moves:
-				moves[agentPickedMove].append(agent)
-			else:
-				moves[agentPickedMove] = [agent]
+			if agentPickedMove is not None:
+				if agentPickedMove in moves:
+					moves[agentPickedMove].append(agent)
+				else:
+					moves[agentPickedMove] = [agent]
 		
 		# Loop through our moves, resolve each conflict per move and pick agent to actually move
 		for location, agentList in moves.items():

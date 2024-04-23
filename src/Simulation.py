@@ -47,7 +47,7 @@ class Simulation:
         # Run the full simulation
         for step in range(self.numSteps):
             if not env.agents:
-                print(f'Timestep {step + 1}: All {len(self.escapedAgents)} agents exited successfully!')
+                print(f'Timestep {step + 1}: All {len(env.escapedAgents)} agents exited successfully!')
                 self.outputAllGraphs()
                 return env
             
