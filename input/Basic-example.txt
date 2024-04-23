@@ -3,11 +3,11 @@ XXXXXXXOXXXXXXX
 X             X
 X      b      X
 X             X
-X             X
+X c c   c     X
 X      c   b  X
-X    b    bcc X
+X b  b    bcc X
 X   c   b     X
-X             X
+X      b      X
 X  c  c   b   X
-X             X
+X  b  b   b   X
 XXXXXXXXXXXXXXX

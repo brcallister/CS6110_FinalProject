@@ -15,6 +15,7 @@ class Environment:
 		self.numTotalConflicts = 0
 		self.exits = []
 		self.map = []
+		self.penalty = 1.75  # paper used 1 <= penalty <= 2.5
 
 		# Set up map layout
 		agentId = 0
@@ -56,6 +57,8 @@ class Environment:
 			self.map.append([self.Location([]) for _ in range(numRows)])
 	
 	def findPotentialMoves(self, position):
+		# if we want to improve pathing, potentially keep track of agents last locations
+		# and don't allow them to move back to previous locations (maybe let them forget previous locations over time if needed)
 		agentX, agentY = position[1], position[0]
 		potentialMoves = []
 		# Find all suitable spaces an Agent can move to
@@ -68,6 +71,49 @@ class Environment:
 					potentialMoves.append((j, i))
 		return potentialMoves
 	
+	def determineWinner(self, agentList):
+		winner = None
+		# No conflict - there is only one agent
+		if len(agentList) == 1:
+			winner = agentList[0]
+		# Resolve conflict - Multiple agents attempting to enter same location
+		else:
+			# Dictionary of Agent -> Decision
+			agentDecisions = {}
+			numCooperators = 0 # M from the paper
+			numConflicts = len(agentList)   # N from the paper
+
+			for contender in agentList:
+				decision = contender.decideCoopOrBetray()
+				agentDecisions[contender] = decision
+				if decision == 'Cooperate':
+					numCooperators += 1
+			
+			# all of the contenders are cooperators, so they each have equal likelihood of winning
+			if numCooperators == numConflicts:
+				winner = random.choice(list(agentDecisions.keys()))
+			# there is one defector, so they win
+			elif numConflicts - numCooperators == 1:
+				# find the defector
+				for contender in agentList:
+					if contender.decideCoopOrBetray() == 'Betray':
+						winner = contender
+						break
+			# there are multiple defectors
+			elif numConflicts - numCooperators > 1:
+				probs = []
+				for contender in agentList:
+					if contender.decideCoopOrBetray() == 'Cooperate':
+						# they have 0 chance of winning because they are betrayed
+						probs.append(0)
+					else:
+						# win with probability 1 / (N - M)^P
+						probs.append(1 / ((numConflicts - numCooperators) ** self.penalty))
+
+				winner = random.choices(agentList, weights=probs, k=1)[0]
+
+		return winner
+
 	def runOneTimeStep(self):
 		moves = {}
 		# Loop through agents, let each figure out where they want to move
@@ -83,20 +129,8 @@ class Environment:
 		
 		# Loop through our moves, resolve each conflict per move and pick agent to actually move
 		for location, agentList in moves.items():
-			winner = None
-			# No conflict - there is only one agent
-			if len(agentList) == 1:
-				winner = agentList[0]
-			# Resolve conflict - Multiple agents attempting to enter same location
-			else:
-				# Dictionary of Agent -> Decision
-				agentDecisions = {}
-				for contender in agentList:
-					decision = contender.decideCoopOrBetray()
-					agentDecisions[contender] = decision
-				# TODO: Non-randomly figure out winner
-				winner = random.choice(list(agentDecisions.keys()))
-				
+			winner = self.determineWinner(agentList)
+
 			# Add the winner to new location (we MUST do this first, or the reference is killed)
 			self.map[location[0]][location[1]].thingsHere.append(winner)
 			# Remove the winner from their old location
