@@ -53,6 +53,22 @@ def draw_image(environment, filename):
     plt.savefig(os.path.join(OUTPUT_DIR, filename))
     plt.close()
 
+def draw_graph(data, labels, filename):
+    x = range(len(data))
+    y1 = [d[0] for d in data]
+    y2 = [d[1] for d in data]
+    
+    plt.figure(figsize=(10, 6))
+    plt.stackplot(x, y1, y2, labels=labels[1:])
+    plt.title(labels[0])
+    plt.xlabel('Time')
+    plt.ylabel('Number of Agents')
+    plt.legend(loc='lower left')
+    
+    # Save plot
+    plt.savefig(os.path.join(OUTPUT_DIR, filename))
+    plt.close()
+
 def print_env_to_console(environment, timestep):
     print(f'Current Environment (timestep: {timestep + 1}):')
     # Loop through array

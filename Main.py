@@ -15,7 +15,7 @@ if __name__ == "__main__":
     env = Environment(numRows, numCols, rawLayout)
 
     # Specify the type of simulation to run
-    simulation = Simulation(numSteps=100, printFreq=10, graphicFreq=5, outputInitial=True)
+    simulation = Simulation(numSteps=50, printFreq=1, graphicFreq=1, outputInitial=True)
 
     # Run the actual simulation
     finalEnv = simulation.runSimulation(env)
