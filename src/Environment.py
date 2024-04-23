@@ -41,7 +41,12 @@ class Environment:
 					newLocation = self.Location([newAgent])
 					self.agents.append(newAgent)
 					agentId += 1
-				# TODO - add additional items here
+				# Light
+				elif rawLayout[i][j] == 'L':
+					newLocation = self.Location([Entity('LIGHT')])
+				# Exit Sign
+				elif rawLayout[i][j] == 'E':
+					newLocation = self.Location([Entity('EXIT_SIGN')])
 				row.append(newLocation)
 			while len(row) < self.numCols:
 				row.append(self.Location([]))
@@ -61,7 +66,7 @@ class Environment:
 				if i == agentX and j == agentY:
 					continue
 				# If there is not another agent or a wall, that location is available to move to.
-				if not self.map[j][i].isEntityHere([Entity('AgentBetray'), Entity('AgentCooperate'), Entity('WALL')]):
+				if not self.map[j][i].isEntityHere([Entity('AgentBetray'), Entity('AgentCooperate'), Entity('WALL'), Entity('EXIT_SIGN')]):
 					potentialMoves.append((j, i))
 		return potentialMoves
 	
