@@ -82,7 +82,8 @@ class Environment:
 			agentDecisions = {}
 			numCooperators = 0 # M from the paper
 			numConflicts = len(agentList)   # N from the paper
-
+			self.numTotalConflicts += numConflicts
+			
 			for contender in agentList:
 				decision = contender.decideCoopOrBetray()
 				agentDecisions[contender] = decision

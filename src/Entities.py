@@ -19,7 +19,7 @@ class Agent(Entity):
 		self.numberTimesNotMoved = 0
 
 	def calculateSF(self, location, exit):
-		sf = 1/(math.sqrt((exit[0] - location[0])**2 + (exit[1] - location[1])**2))
+		sf = 1.0/(math.sqrt((exit[0] - location[0])**2 + (exit[1] - location[1])**2))
 		return sf
 
 	def pickDesiredLocation(self, potentialMoves, exits):
@@ -40,19 +40,23 @@ class Agent(Entity):
 				moveSf = self.calculateSF(move, exit)
 				prob = math.exp(self.familiarityWithExit*moveSf) / sumSf
 				# using a tuple as a key will allow us to konw what move towards what exit is best for our agent
-				movementProbs[(move[0], move[1])] = prob
+				if (move[0], move[1]) in movementProbs:
+					if prob > movementProbs[(move[0], move[1])]:
+						movementProbs[(move[0], move[1])] = prob
+				else:
+					movementProbs[(move[0], move[1])] = prob
 
 		# TODO: We may still want to just swap to this
-		# bestMove = max(movementProbs, key=movementProbs.get)
+		chosenMove = max(movementProbs, key=movementProbs.get)
 		
 		# Pick a move based on the calculated probabilities
-		moves, probs = zip(*movementProbs.items())
+		# moves, probs = zip(*movementProbs.items())
 		# Apply an exponent function on the probabilities so better decisions are more heavily weighted
-		probs = [x ** 32 for x in probs]
+		# probs = [x ** 32 for x in probs]
 		# Rescale to add to 100 so the probabilities are easier to debug
-		probs = [x / sum(probs) * 100 for x in probs]
+		# probs = [x / sum(probs) * 100 for x in probs]
 		# Choose a move randomly based on the probabilities
-		chosenMove = random.choices(moves, weights=probs, k=1)[0]
+		# chosenMove = random.choices(moves, weights=probs, k=1)[0]
 		return chosenMove
 	
 	def changeRolesIfDesired(self):
