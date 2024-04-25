@@ -9,7 +9,7 @@ from src.OutputData import draw_image
 
 if __name__ == "__main__":
     # Read layout information in from file and prep output dir
-    numCols, numRows, rawLayout = read_in_data("Simulation1.txt")
+    numCols, numRows, rawLayout = read_in_data("Basic-example.txt")
 
     # Create full environment according to specs
     env = Environment(numRows, numCols, rawLayout)

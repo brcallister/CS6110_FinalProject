@@ -122,6 +122,7 @@ def print_stats_to_console(env, timestep):
     else:
         print(f'Current Stats (timestep {timestep + 1}):')
         print(f'\tTotal Number of Conflicts: {env.numTotalConflicts}')
+        print(f'\tTotal Number of Role Switches: {env.numTotalSwitches}')
         print(f'\tEscaped Agents: {len(env.escapedAgents)}')
         print(f'\tTotal Agents:   {len(env.agents) + len(env.escapedAgents)}')
         numCoopAgents = 0

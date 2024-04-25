@@ -5,9 +5,9 @@ X      b      X
 X             X
 X c c   c     X
 X      c   b  X
-X b  b    bcc X
-X   c   b     X
+X b  c    bcc X
+X   c   c     X
 X      b      X
 X  c  c   b   X
-X  b  b   b   X
+X  b  c   b   X
 XXXXXXXXXXXXXXX

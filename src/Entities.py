@@ -16,7 +16,6 @@ class Agent(Entity):
 		self.currentLocation = startLocation      # [x,y]
 		self.desiredLocation = []      # [x,y] of the location they want to move to
 		self.familiarityWithExit = 10  # TODO: figure out how this actually works
-		self.numberTimesNotMoved = 0
 
 	def calculateSF(self, location, exit):
 		sf = 1.0/(math.sqrt((exit[0] - location[0])**2 + (exit[1] - location[1])**2))
@@ -59,13 +58,26 @@ class Agent(Entity):
 		# chosenMove = random.choices(moves, weights=probs, k=1)[0]
 		return chosenMove
 	
-	def changeRolesIfDesired(self):
-		# TODO: use the formulas in the paper
-		if self.numberTimesNotMoved >= 10:
+	# returns 1 if switched, 0 if not
+	def changeRolesIfDesired(self, coopPayoff, betrayPayoff):
+		d = 3  # inertia (this wasn't specified in the paper)
+		m_x = 0
+		m_y = 0
+		if self.type == 'AgentCooperate':
+			m_x = d * coopPayoff  # formula 3 from paper
+			m_y = betrayPayoff    # formula 4 from paper
+		else:
+			m_x = d * betrayPayoff  # formula 3 from paper
+			m_y = coopPayoff        # formula 4 from paper
+		probabilitySwitchType = (1 / (1 + (math.exp(((m_x - m_y) / 0.1)))))  # formula 5 from paper
+
+		if random.random() <= probabilitySwitchType:
 			if self.type == 'AgentBetray':
 				self.type = 'AgentCooperate'
 			elif self.type == 'AgentCooperate':
 				self.type = 'AgentBetray'
+			return 1
+		return 0
 	
 	def decideCoopOrBetray(self):
 		# Right now, they will just decide based off of their agent type
