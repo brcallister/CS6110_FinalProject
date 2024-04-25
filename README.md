@@ -1,6 +1,6 @@
 # CS 6110 - Final Project
 
-TODO
+This is a Game Theory-based simulation in which many agents are tasked with evacuating from a building as fast as possible.
 
 ### Table of Contents
 - [Setup](README.md#setup)
@@ -28,12 +28,14 @@ For best results, run this program from its top-level directory:
 ## Input
 
 Input files are expected in the `input` directory, and in the following format:
-  - The first line of the file should contain two numbers, separated by a single space. These numbers correspond to the number of rows and columns in the map, respectively. (i.e. `5 8` for a file that has 5 rows and 8 columns)
+  - The first line of the file should contain two numbers, separated by a single space. These numbers correspond to the number of columns and rows in the map, respectively. (i.e. `5 8` for a file that has 5 columns and 8 rows)
   - After that, each line will hold the map data:
       - `X` represents a Wall
       - `O` represents an Exit
+      - `E` represents an Exit Sign, which acts as a wall with a sign on it, guiding agents to the exit
+      - `b` represents an Agent, with an initial strategy of "Betray"
+      - `c` represents an Agent, with an initial strategy of "Cooperate"
       - Empty spaces represent locations where agents can freely traverse
-  - Extra whitespace or newlines are ignored
   - See [this input file](input/Debug1.txt) for an example
 
 ## Output
@@ -80,7 +82,7 @@ such as the elderly and children, and not everyone is selfish
 ### The Game
 #### Math behind the Game Theory
 
-* Conflict arrises when to people try to occupy the same space at the same time step. Who occupies the space is decided by a prisoners dillema like game. Values of the game are described in `Crowd Evacuation Conflicts` section 3.1, Tables (1-3).
+* Conflict arises when to people try to occupy the same space at the same time step. Who occupies the space is decided by a prisoner's dilemma like game. Values of the game are described in `Crowd Evacuation Conflicts` section 3.1, Tables (1-3).
 
 * Tables (2-3) gives us formulats to calculate the probablity of pedestrian movement in the event of a conflict, where `p` represents the penalty for defectors. Table (3) is for 3 or more players trying to go for the same space. 
 
@@ -94,7 +96,7 @@ such as the elderly and children, and not everyone is selfish
 
 * If there are more than one traitors, the traitor will enter the space with a probablity of `1/(N - M)^p`
 
-* Other litterature suggests `p` should be 1 ≥ `p` ≥ 2.5
+* Other literature suggests `p` should be 1 ≥ `p` ≥ 2.5
 
 #### Agent Strategies
 
@@ -108,4 +110,3 @@ pedestrians in the actual game, and `d` represents inertia. Usually, due to iner
 * `Mx` is the estimated payoff of the current policy. `My` is the estimated payoff of the opposite policy. 
 
 * If a person fails in a game (They don't get to move) then the pedestrian will update their strategy by changing to the opposite strategy with probability `W(Sx-Sy)`, this is described in `Crowd Evacuation Conflicts` section 3.2, Figures (5). `k` represents noise, which represents the strength of irrationality. This is set to 0.1 but we could probably play around with this
-
