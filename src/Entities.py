@@ -22,31 +22,6 @@ class Agent(Entity):
 		sf = 1.0/(math.sqrt((exit[0] - location[0])**2 + (exit[1] - location[1])**2))
 		return sf
 	
-	# Generate points along the line from (x1, y1) to (x2, y2) using Bresenham's line algorithm.
-	def bresenham(x1, y1, x2, y2):
-		points = []
-		dx = abs(x2 - x1)
-		dy = -abs(y2 - y1)
-		sx = 1 if x1 < x2 else -1
-		sy = 1 if y1 < y2 else -1
-		err = dx + dy
-		while True:
-			points.append((x1, y1))
-			if x1 == x2 and y1 == y2:
-				break
-			e2 = 2 * err
-			if e2 >= dy:
-				if x1 == x2:
-					break
-				err += dy
-				x1 += sx
-			if e2 <= dx:
-				if y1 == y2:
-					break
-				err += dx
-				y1 += sy
-		return points
-
 	def pickDesiredLocation(self, potentialMoves):
 		# TODO: If goals list is empty, have them do something random or follow the crowd.
 		if len(potentialMoves) == 0 or len(self.goals) == 0:
