@@ -15,6 +15,7 @@ This is a Game Theory-based simulation in which many agents are tasked with evac
 
 2. Ensure all third-party dependencies are installed:
     - `pip install matplotlib`
+	- `pip install bresenham`
 
 #### Simulation Setup
 1. Add desired layout files to the `input` directory
@@ -32,7 +33,7 @@ Input files are expected in the `input` directory, and in the following format:
   - After that, each line will hold the map data:
       - `X` represents a Wall
       - `O` represents an Exit
-      - `E` represents an Exit Sign, which acts as a wall with a sign on it, guiding agents to the exit
+      - `E` represents an Exit Sign guiding agents to the exit
       - `b` represents an Agent, with an initial strategy of "Betray"
       - `c` represents an Agent, with an initial strategy of "Cooperate"
       - Empty spaces represent locations where agents can freely traverse

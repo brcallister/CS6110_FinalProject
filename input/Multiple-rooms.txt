@@ -1,35 +1,35 @@
 66 34
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXOOXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+X c             X                                X               X
+X               X                                X        b      X
 X               X                                X               X
+X       b       X                                X               X
+X               E                                E               X
 X               X                                X               X
-X               X                                X               X
-X               X                                X               X
-X                                                                X
-X               X                                X               X
-X               X                                X               X
-X               X                                X               X
-X               X                                X               X
-XXXXXXXXXXXXXXXXX                                XXXXXXXXXXXXXXXXX
-X               X                                X               X
-X               X                                X               X
-X               X                                X               X
-X               X                                X               X
-X               X                                X               X
-X                                                                X
-X               X                                X               X
-X               X                                X               X
-X               X                                X               X
-X               X                                X               X
+X               X                                X     b         X
+X    c          X                                X      c        X
 X               X                                X               X
 XXXXXXXXXXXXXXXXX                                XXXXXXXXXXXXXXXXX
 X               X                                X               X
 X               X                                X               X
+X         b     X                                X        c      X
+X      c        X                                X               X
+X               X                                X               X
+X               E                                E               X
 X               X                                X               X
 X               X                                X               X
+X        c      X                                X         b     X
+X               X                                X      b        X
 X               X                                X               X
-X                                                                X
+XXXXXXXXXXXXXXXXX                                XXXXXXXXXXXXXXXXX
 X               X                                X               X
 X               X                                X               X
+X        c      X                                X       b       X
+X       b       X                                X        c      X
+X               X                                X               X
+X               E                                E               X
+X               X                                X               X
+X               X                                X     b         X
 X               X                                X               X
 X               X                                X               X
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXOOXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

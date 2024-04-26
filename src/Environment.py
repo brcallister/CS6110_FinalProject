@@ -3,7 +3,8 @@
 # =======================
 
 import random
-
+import math
+from bresenham import bresenham
 from src.Entities import Entity, Agent
 
 class Environment:    
@@ -15,6 +16,7 @@ class Environment:
 		self.numTotalConflicts = 0
 		self.numTotalSwitches = 0
 		self.exits = []
+		self.exitSigns = []
 		self.map = []
 		self.penalty = 1.75  # paper used 1 <= penalty <= 2.5
 
@@ -50,6 +52,7 @@ class Environment:
 				# Exit Sign
 				elif rawLayout[i][j] == 'E':
 					newLocation = self.Location([Entity('EXIT_SIGN')])
+					self.exitSigns.append((i, j))
 				row.append(newLocation)
 			while len(row) < self.numCols:
 				row.append(self.Location([]))
@@ -68,7 +71,7 @@ class Environment:
 				if i == agentX and j == agentY:
 					continue
 				# If there is not another agent or a wall, that location is available to move to.
-				if not self.map[j][i].isEntityHere([Entity('AgentBetray'), Entity('AgentCooperate'), Entity('WALL'), Entity('EXIT_SIGN')]):
+				if not self.map[j][i].isEntityHere([Entity('AgentBetray'), Entity('AgentCooperate'), Entity('WALL')]):
 					potentialMoves.append((j, i))
 		return potentialMoves
 	
@@ -126,6 +129,23 @@ class Environment:
 							contender = winner
 
 		return winner, coopPayoff, betrayPayoff
+	
+	def lineOfSight(self, agentLocation, goalLocation):
+		points = list(bresenham(agentLocation[1], agentLocation[0], goalLocation[1], goalLocation[0]))
+		for (x, y) in points:
+			if self.map[y][x].isEntityHere([Entity('WALL')]):
+				return False
+		return True
+	
+	def findClosestGoal(self, agentLocation, goals):
+		minDistance = float('inf')
+		closest = None
+		for goal in goals:
+			dist = math.sqrt((agentLocation[0] - goal[0])**2 + (agentLocation[1] - goal[1])**2)
+			if dist < minDistance:
+				closest = goal
+				minDistance = dist
+		return closest
 
 	def runOneTimeStep(self):
 		moves = {}
@@ -133,8 +153,40 @@ class Environment:
 		# Loop through agents, let each figure out where they want to move
 		for agent in self.agents:
 			agentPosition = agent.currentLocation
+			# Check to see if we can see any exits
+			exitsFound = []
+			for exit in self.exits:
+				if(self.lineOfSight(agentPosition, exit)):
+					exitsFound.append(exit)
+			if len(exitsFound) > 0:
+				# Find the closets one we can see
+				closestExit = self.findClosestGoal(agentPosition, exitsFound)
+				if closestExit is not None:
+					if (len(agent.goals) == 0):
+						agent.goals.append(closestExit)
+					elif(closestExit != agent.goals[-1]):
+						agent.goals.append(closestExit)
+			else:
+				# If we can't find any exits, look for exit signs
+				exitSignsFound = []
+				for exitSign in self.exitSigns:
+					if(self.lineOfSight(agentPosition, exitSign)):
+						exitSignsFound.append(exitSign)
+				if len(exitSignsFound) > 0:
+					# Find the closets one we can see
+					closestExitSign = self.findClosestGoal(agentPosition, exitSignsFound)
+					if closestExitSign is not None:
+						if (len(agent.goals) == 0):
+							agent.goals.append(closestExitSign)
+						elif(closestExitSign != agent.goals[-1]):
+							agent.goals.append(closestExitSign)
+				
+			# If we can't see anything
+			# TODO: Have agent move closer to another nearyby agent because of herd mentality
+			
 			potentialMoves = self.findPotentialMoves(agentPosition)
-			agentPickedMove = agent.pickDesiredLocation(potentialMoves, self.exits)
+			
+			agentPickedMove = agent.pickDesiredLocation(potentialMoves)
 			agent.desiredLocation = agentPickedMove
 			if agentPickedMove is not None:
 				if agentPickedMove in moves:

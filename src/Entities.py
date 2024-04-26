@@ -16,34 +16,62 @@ class Agent(Entity):
 		self.currentLocation = startLocation      # [x,y]
 		self.desiredLocation = []      # [x,y] of the location they want to move to
 		self.familiarityWithExit = 10  # TODO: figure out how this actually works
+		self.goals = []
 
 	def calculateSF(self, location, exit):
 		sf = 1.0/(math.sqrt((exit[0] - location[0])**2 + (exit[1] - location[1])**2))
 		return sf
+	
+	# Generate points along the line from (x1, y1) to (x2, y2) using Bresenham's line algorithm.
+	def bresenham(x1, y1, x2, y2):
+		points = []
+		dx = abs(x2 - x1)
+		dy = -abs(y2 - y1)
+		sx = 1 if x1 < x2 else -1
+		sy = 1 if y1 < y2 else -1
+		err = dx + dy
+		while True:
+			points.append((x1, y1))
+			if x1 == x2 and y1 == y2:
+				break
+			e2 = 2 * err
+			if e2 >= dy:
+				if x1 == x2:
+					break
+				err += dy
+				x1 += sx
+			if e2 <= dx:
+				if y1 == y2:
+					break
+				err += dx
+				y1 += sy
+		return points
 
-	def pickDesiredLocation(self, potentialMoves, exits):
-		if len(potentialMoves) == 0:
+	def pickDesiredLocation(self, potentialMoves):
+		# TODO: If goals list is empty, have them do something random or follow the crowd.
+		if len(potentialMoves) == 0 or len(self.goals) == 0:
 			return None
 		
+		goal = self.goals[-1]
 		movementProbs = {}
 		# For every exit that exists, we need to find what exit the agent will move toward
-		for exit in exits:
-			# Find the sum of all SF values for this potential move (3 figure 2 in paper)
-			sumSf = 0
-			for move in potentialMoves:
-				if move == exit:
-					return (move[0], move[1])
-				sumSf += math.exp(self.familiarityWithExit * self.calculateSF(move, exit))
-			# Now calculate the probability of making that move (3 figure 2 in paper)
-			for move in potentialMoves:
-				moveSf = self.calculateSF(move, exit)
-				prob = math.exp(self.familiarityWithExit*moveSf) / sumSf
-				# using a tuple as a key will allow us to konw what move towards what exit is best for our agent
-				if (move[0], move[1]) in movementProbs:
-					if prob > movementProbs[(move[0], move[1])]:
-						movementProbs[(move[0], move[1])] = prob
-				else:
+		
+		# Find the sum of all SF values for this potential move (3 figure 2 in paper)
+		sumSf = 0
+		for move in potentialMoves:
+			if move == goal:
+				return (move[0], move[1])
+			sumSf += math.exp(self.familiarityWithExit * self.calculateSF(move, goal))
+		# Now calculate the probability of making that move (3 figure 2 in paper)
+		for move in potentialMoves:
+			moveSf = self.calculateSF(move, goal)
+			prob = math.exp(self.familiarityWithExit*moveSf) / sumSf
+			# using a tuple as a key will allow us to konw what move towards what exit is best for our agent
+			if (move[0], move[1]) in movementProbs:
+				if prob > movementProbs[(move[0], move[1])]:
 					movementProbs[(move[0], move[1])] = prob
+			else:
+				movementProbs[(move[0], move[1])] = prob
 
 		# TODO: We may still want to just swap to this
 		chosenMove = max(movementProbs, key=movementProbs.get)
