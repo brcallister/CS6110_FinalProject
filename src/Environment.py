@@ -79,6 +79,7 @@ class Environment:
 		winner = None
 		coopPayoff = 0
 		betrayPayoff = 0
+		losers = []
 		# No conflict - there is only one agent
 		if len(agentList) == 1:
 			winner = agentList[0]
@@ -126,9 +127,13 @@ class Environment:
 					if contender.decideCoopOrBetray() == 'Betray':
 						if random.random() <= winProbability:
 							betrayPayoff = winProbability
-							contender = winner
+							winner = contender
+			if winner is None:
+				losers = agentList
+			else:
+				losers = agentList.remove(winner)
 
-		return winner, coopPayoff, betrayPayoff
+		return winner, losers, coopPayoff, betrayPayoff
 	
 	def lineOfSight(self, agentLocation, goalLocation):
 		points = list(bresenham(agentLocation[1], agentLocation[0], goalLocation[1], goalLocation[0]))
@@ -150,6 +155,7 @@ class Environment:
 	def runOneTimeStep(self):
 		moves = {}
 		winnerIdList = []
+		losersList = []
 		# Loop through agents, let each figure out where they want to move
 		for agent in self.agents:
 			agentPosition = agent.currentLocation
@@ -196,7 +202,9 @@ class Environment:
 		
 		# Loop through our moves, resolve each conflict per move and pick agent to actually move
 		for location, agentList in moves.items():
-			winner, coopPayoff, betrayPayoff = self.determineWinner(agentList)
+			winner, losers, coopPayoff, betrayPayoff = self.determineWinner(agentList)
+			if losers is not None:
+				losersList.extend(losers)
 			if winner == None:
 				break
 			winnerIdList.append(winner.id)
@@ -215,9 +223,8 @@ class Environment:
 				self.agents.remove(winner)
 
 		# Give all non-winning agents a chance to swap their type
-		for agent in self.agents:
-			if agent.id not in winnerIdList:
-				self.numTotalSwitches += agent.changeRolesIfDesired(coopPayoff, betrayPayoff)
+		for agent in losersList:
+			self.numTotalSwitches += agent.changeRolesIfDesired(coopPayoff, betrayPayoff)
 
 	class Location:
 		def __init__(self, entitiesHere):
