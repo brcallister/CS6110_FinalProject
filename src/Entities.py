@@ -18,10 +18,18 @@ class Agent(Entity):
 		self.familiarityWithExit = 10  # TODO: figure out how this actually works
 		self.goals = []
 
+	"""
+	Calculates static field value, this helps determine what square our agents choose to move toward
+	Returns a static field value
+	"""
 	def calculateSF(self, location, exit):
 		sf = 1.0/(math.sqrt((exit[0] - location[0])**2 + (exit[1] - location[1])**2))
 		return sf
 	
+	"""
+	Picks the desired next square to move to out of a list of potential moves
+	Returns the desired location
+	"""
 	def pickDesiredLocation(self, potentialMoves):
 		# TODO: If goals list is empty, have them do something random or follow the crowd.
 		if len(potentialMoves) == 0 or len(self.goals) == 0:
@@ -61,7 +69,10 @@ class Agent(Entity):
 		# chosenMove = random.choices(moves, weights=probs, k=1)[0]
 		return chosenMove
 	
-	# returns 1 if switched, 0 if not
+	"""
+	Changes the role of the agent if it deems it profitable
+	Returns 0 if changed, 1 if not
+	"""
 	def changeRolesIfDesired(self, coopPayoff, betrayPayoff):
 		d = 3  # inertia (this wasn't specified in the paper)
 		m_x = 0
@@ -82,6 +93,9 @@ class Agent(Entity):
 			return 1
 		return 0
 	
+	"""
+	Checks to see what type the agent is
+	"""
 	def decideCoopOrBetray(self):
 		# Right now, they will just decide based off of their agent type
 		if self.type == "AgentCooperate":

@@ -1,11 +1,11 @@
 50 10
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 O                                                O
-X                                                X
+O                                                O
 X          ccccbccccccccccccccccccccc            X
 X          cccccccccccccccccbcccccccc            X
 X          cccccccbcccccccccccccccccc            X
 X          ccccccccccccccccccbccccccc            X
-X                                                X
+O                                                O
 O                                                O
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

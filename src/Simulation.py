@@ -47,6 +47,7 @@ class Simulation:
         # Run the full simulation
         for step in range(self.numSteps):
             if not env.agents:
+                print_stats_to_console(env, step)
                 print(f'Timestep {step + 1}: All {len(env.escapedAgents)} agents exited successfully!')
                 self.outputAllGraphs()
                 return env
@@ -64,10 +65,11 @@ class Simulation:
 
             # Print according to how often the user specified
             if self.printFrequency != 0 and step % self.printFrequency == self.printFrequency - 1:
-                print_env_to_console(env, step)
                 print_stats_to_console(env, step)
+                print_env_to_console(env, step)
             if self.graphicFrequency != 0 and step % self.graphicFrequency == self.graphicFrequency - 1:
                 draw_image(env, f"{step + 1}_Map.png")
+        print_stats_to_console(env, step)
         print(f'After {self.numSteps} timesteps, {len(env.agents)}/{len(env.agents) + len(env.escapedAgents)} agents remain in the building.')
         self.outputAllGraphs()
         return env

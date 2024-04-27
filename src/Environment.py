@@ -60,6 +60,10 @@ class Environment:
 		while len(self.map) < self.numRows:
 			self.map.append([self.Location([]) for _ in range(numRows)])
 	
+	"""
+	Takes a current postion, and finds spaces that an agent could potentially move to
+	Returns a list of available positions an agent could move to
+	"""
 	def findPotentialMoves(self, position):
 		# if we want to improve pathing, potentially keep track of agents last locations
 		# and don't allow them to move back to previous locations (maybe let them forget previous locations over time if needed)
@@ -75,6 +79,10 @@ class Environment:
 					potentialMoves.append((j, i))
 		return potentialMoves
 	
+	"""
+	Takes a list of agents, and determines what agent gets to move toward their chosen spot
+	Returns the winner, losers, and payoffs 
+	"""
 	def determineWinner(self, agentList):
 		winner = None
 		coopPayoff = 0
@@ -135,6 +143,10 @@ class Environment:
 
 		return winner, losers, coopPayoff, betrayPayoff
 	
+	"""
+	Uses bresenham's line algorithm to see if there are any exits in line of sight to an agent
+	Returns true if the agent has line of sight
+	"""
 	def lineOfSight(self, agentLocation, goalLocation):
 		points = list(bresenham(agentLocation[1], agentLocation[0], goalLocation[1], goalLocation[0]))
 		for (x, y) in points:
@@ -142,6 +154,10 @@ class Environment:
 				return False
 		return True
 	
+	"""
+	Determines the closest goal to a specific agent location
+	Returns the closets goal
+	"""
 	def findClosestGoal(self, agentLocation, goals):
 		minDistance = float('inf')
 		closest = None
@@ -152,6 +168,9 @@ class Environment:
 				minDistance = dist
 		return closest
 
+	"""
+	Runs one time step of our simulation
+	"""
 	def runOneTimeStep(self):
 		moves = {}
 		winnerIdList = []
